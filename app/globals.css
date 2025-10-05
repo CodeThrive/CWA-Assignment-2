@@ -1,0 +1,86 @@
+:root {
+  --bg: #ffffff;
+  --fg: #000000;
+  --accent: #000000;
+  --border: #000000;
+}
+[data-theme="dark"] {
+  --bg: #121212;
+  --fg: #e5e5e5;
+  --accent: #e5e5e5;
+  --border: #555555;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+  background: var(--bg);
+  color: var(--fg);
+}
+
+header, footer {
+  border-bottom: 2px solid var(--border);
+}
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1rem;
+}
+nav {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+nav a {
+  margin: 0 0.5rem;
+  padding: 0.25rem;
+  text-decoration: none;
+  color: var(--fg);
+}
+nav a.active {
+  border-bottom: 2px solid var(--accent);
+}
+footer {
+  padding: 1rem;
+  text-align: center;
+  border-top: 2px solid var(--border);
+}
+.hamburger {
+  display: none;
+  cursor: pointer;
+}
+.hamburger span {
+  display: block;
+  width: 1.5rem;
+  height: 2px;
+  background: var(--fg);
+  margin: 4px 0;
+  transition: transform 0.3s ease;
+}
+
+@media (max-width: 768px) {
+  nav ul {
+    display: none;
+  }
+  .hamburger {
+    display: inline-block;
+  }
+}
+html, body { height: 100%; }
+body.layout {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+
+main.main {
+  flex: 1 1 auto;
+  display: flex;           
+  flex-direction: column;
+  min-height: 0;           
+  padding: 1rem;
+}
