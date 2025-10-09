@@ -1,4 +1,6 @@
 node_modules
+prisma/dev.db
+prisma/migrations
 npm-debug.log*
 .next
 out

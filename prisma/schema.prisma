@@ -1,0 +1,34 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model EscapeRoom {
+  id          String   @id @default(cuid())
+  name        String
+  timeLimit   Int
+  challenges  String
+  htmlOutput  String   @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("escape_rooms")
+}
+
+model GameSession {
+  id              String   @id @default(cuid())
+  escapeRoomId    String?
+  playerName      String?
+  timeLimit       Int
+  timeCompleted   Int?
+  completed       Boolean  @default(false)
+  score           Int      @default(0)
+  createdAt       DateTime @default(now())
+
+  @@map("game_sessions")
+}
