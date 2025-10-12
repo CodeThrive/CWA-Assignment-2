@@ -49,9 +49,9 @@ const CHALLENGE_TEMPLATES = {
   api: {
     type: 'api' as const,
     title: 'API Response',
-    description: 'Parse this JSON and extract the user names into an array.',
-    code: '',
-    solution: 'const data = JSON.parse(json);\nconst names = data.users.map(u => u.name);'
+    description: 'Parse this JSON data and extract all user names into an array: {"users":[{"name":"Alice","id":1},{"name":"Bob","id":2}]}',
+    code: 'const json = \'{"users":[{"name":"Alice","id":1},{"name":"Bob","id":2}]}\';\n// Your code here',
+    solution: 'const json = \'{"users":[{"name":"Alice","id":1},{"name":"Bob","id":2}]}\';\nconst data = JSON.parse(json);\nconst names = data.users.map(u => u.name);'
   }
 };
 
