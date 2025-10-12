@@ -215,95 +215,42 @@ export default function EscapeRoomPage() {
     }
   };
 
-  const generateHTML = () => {
-    const esc = (s: string) =>
-      s.replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;')
-       .replaceAll('"', '&quot;').replaceAll("'", '&#39;');
+const generateHTML = () => {
+  const svgIcons: Record<string, string> = {
+    format: '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>',
+    debug: '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19.439 15.439c.586.586.586 1.536 0 2.121l-2.122 2.122c-.585.585-1.535.585-2.121 0l-3.536-3.536c-.585-.585-.585-1.535 0-2.121l2.122-2.122c.585-.585 1.535-.585 2.121 0l3.536 3.536z"/></svg>',
+    generate: '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m5.5-14.5l-4 4m-3 3l-4 4m11 0l-4-4m-3-3l-4-4"/></svg>',
+    transform: '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>',
+    logic: '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>',
+    api: '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="16" cy="12" r="1" fill="currentColor"/></svg>'
+  };
 
-    const svgIcons: Record<string, string> = {
-      format: '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>',
-      debug: '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19.439 15.439c.586.586.586 1.536 0 2.121l-2.122 2.122c-.585.585-1.535.585-2.121 0l-3.536-3.536c-.585-.585-.585-1.535 0-2.121l2.122-2.122c.585-.585 1.535-.585 2.121 0l3.536 3.536z"/></svg>',
-      generate: '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M12 1v6m0 6v6m5.5-14.5l-4 4m-3 3l-4 4m11 0l-4-4m-3-3l-4-4"/></svg>',
-      transform: '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg>',
-      logic: '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>',
-      api: '<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="16" cy="12" r="1" fill="currentColor"/></svg>'
-    };
+  const escapeHtml = (s: string) =>
+    s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+     .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
 
-    const challengesHTML = challenges.map((ch, i) => `
-      <div id="stage${i}" style="display:${i === 0 ? 'block' : 'none'};padding:30px;background:linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);border:3px solid #ffd700;border-radius:12px;margin:20px 0;box-shadow:0 8px 32px rgba(0,0,0,0.3);">
-        <div style="display:flex;align-items:center;gap:15px;margin-bottom:20px;">
-          <div style="color:#ffd700;">${svgIcons[ch.type] || svgIcons.format}</div>
-          <h3 style="color:#ffd700;font-size:24px;margin:0;">${esc(ch.title)}</h3>
-        </div>
-        <p style="color:#ffffff;font-size:16px;margin-bottom:20px;">${esc(ch.description)}</p>
-        <textarea id="code${i}" rows="8" style="width:100%;font-family:'Courier New',monospace;padding:12px;font-size:14px;border:2px solid #ffd700;border-radius:8px;background:#1a1a2e;color:#00ff00;resize:vertical;">${esc(ch.code || '')}</textarea>
-        <br/><br/>
-        <button onclick="checkStage(${i})" style="padding:12px 30px;background:linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);color:#1a1a2e;border:none;border-radius:8px;cursor:pointer;font-size:18px;font-weight:bold;box-shadow:0 4px 15px rgba(255,215,0,0.4);transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">Submit Answer</button>
-        <p id="feedback${i}" style="margin-top:15px;font-weight:bold;font-size:18px;"></p>
+  const challengesHTML = challenges.map((ch, i) => {
+    const solutionBase64 = btoa(unescape(encodeURIComponent(ch.solution || '')));
+    return `
+    <div id="stage${i}" data-solution="${solutionBase64}" style="display:${i === 0 ? 'block' : 'none'};padding:30px;background:linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);border:3px solid #ffd700;border-radius:12px;margin:20px 0;box-shadow:0 8px 32px rgba(0,0,0,0.3);">
+      <div style="display:flex;align-items:center;gap:15px;margin-bottom:20px;">
+        <div style="color:#ffd700;">${svgIcons[ch.type] || svgIcons.format}</div>
+        <h3 style="color:#ffd700;font-size:24px;margin:0;">${escapeHtml(ch.title)}</h3>
       </div>
-    `).join('');
+      <p style="color:#ffffff;font-size:16px;margin-bottom:20px;">${escapeHtml(ch.description)}</p>
+      <textarea id="code${i}" rows="8" style="width:100%;font-family:'Courier New',monospace;padding:12px;font-size:14px;border:2px solid #ffd700;border-radius:8px;background:#1a1a2e;color:#00ff00;resize:vertical;">${escapeHtml(ch.code || '')}</textarea>
+      <br/><br/>
+      <button onclick="checkStage(${i})" style="padding:12px 30px;background:linear-gradient(135deg, #ffd700 0%, #ffed4e 100%);color:#1a1a2e;border:none;border-radius:8px;cursor:pointer;font-size:18px;font-weight:bold;box-shadow:0 4px 15px rgba(255,215,0,0.4);transition:transform 0.2s;" onmouseover="this.style.transform='scale(1.05)'" onmouseout="this.style.transform='scale(1)'">Submit Answer</button>
+      <p id="feedback${i}" style="margin-top:15px;font-weight:bold;font-size:18px;"></p>
+    </div>
+  `;
+  }).join('\n');
 
-    const solutions = challenges.map(ch => `'${esc(ch.solution || '')}'`).join(',');
-
-    const script = `
-<script>
-var currentStage = 0;
-var solutions = [${solutions}];
-var startTime = Date.now();
-var timeLimit = ${timeLimit} * 60 * 1000;
-
-function updateTimer() {
-  var elapsed = Date.now() - startTime;
-  var remaining = Math.max(0, timeLimit - elapsed);
-  var minutes = Math.floor(remaining / 60000);
-  var seconds = Math.floor((remaining % 60000) / 1000);
-  document.getElementById('timer').innerText = minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
-  if (remaining < 60000) {
-    document.getElementById('timer').style.color = '#ff4444';
-  }
-  if (remaining > 0) {
-    setTimeout(updateTimer, 1000);
-  } else {
-    document.getElementById('message').innerText = 'Time is up! You did not escape!';
-    document.getElementById('message').style.color = '#ff4444';
-  }
-}
-
-function checkStage(stage) {
-  var userCode = document.getElementById('code' + stage).value.trim().replace(/\\s+/g, ' ');
-  var solution = solutions[stage].trim().replace(/\\s+/g, ' ');
-  var feedback = document.getElementById('feedback' + stage);
-  
-  if (userCode === solution || userCode.indexOf(solution) !== -1) {
-    feedback.innerText = 'Correct!';
-    feedback.style.color = '#00ff00';
-    if (stage < ${challenges.length - 1}) {
-      setTimeout(function() {
-        document.getElementById('stage' + stage).style.display = 'none';
-        document.getElementById('stage' + (stage + 1)).style.display = 'block';
-        currentStage = stage + 1;
-      }, 1500);
-    } else {
-      setTimeout(function() {
-        document.getElementById('message').innerText = 'Congratulations! You escaped the room in time!';
-        document.getElementById('message').style.color = '#ffd700';
-        document.getElementById('stages').style.display = 'none';
-      }, 1500);
-    }
-  } else {
-    feedback.innerText = 'Not quite right. Try again!';
-    feedback.style.color = '#ff4444';
-  }
-}
-
-updateTimer();
-</script>`;
-
-    const html = `<!doctype html>
+  const html = `<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
-<title>${esc(configName)}</title>
+<title>${escapeHtml(configName)}</title>
 <style>
 body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -353,19 +300,79 @@ h1 {
 </head>
 <body>
 <div class="container">
-  <h1>${esc(configName).toUpperCase()}</h1>
+  <h1>${escapeHtml(configName).toUpperCase()}</h1>
   <div id="timer">Loading...</div>
   <div id="message"></div>
   <div id="stages">
     ${challengesHTML}
   </div>
 </div>
-${script}
+<script>
+var currentStage = 0;
+var totalStages = ${challenges.length};
+var startTime = Date.now();
+var timeLimit = ${timeLimit} * 60 * 1000;
+var timerRunning = true;
+
+function updateTimer() {
+  if (!timerRunning) return;
+  
+  var elapsed = Date.now() - startTime;
+  var remaining = Math.max(0, timeLimit - elapsed);
+  var minutes = Math.floor(remaining / 60000);
+  var seconds = Math.floor((remaining % 60000) / 1000);
+  document.getElementById('timer').innerText = minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
+  if (remaining < 60000) {
+    document.getElementById('timer').style.color = '#ff4444';
+  }
+  if (remaining > 0) {
+    setTimeout(updateTimer, 1000);
+  } else {
+    timerRunning = false;
+    document.getElementById('message').innerText = 'Time is up! You did not escape!';
+    document.getElementById('message').style.color = '#ff4444';
+  }
+}
+
+function checkStage(stage) {
+  var stageDiv = document.getElementById('stage' + stage);
+  var solutionBase64 = stageDiv.getAttribute('data-solution');
+  var solution = decodeURIComponent(escape(atob(solutionBase64)));
+  
+  var userCode = document.getElementById('code' + stage).value.trim().replace(/\\s+/g, ' ');
+  var solutionTrimmed = solution.trim().replace(/\\s+/g, ' ');
+  var feedback = document.getElementById('feedback' + stage);
+  
+  if (userCode === solutionTrimmed || userCode.indexOf(solutionTrimmed) !== -1) {
+    feedback.innerText = 'Correct!';
+    feedback.style.color = '#00ff00';
+    if (stage < totalStages - 1) {
+      setTimeout(function() {
+        document.getElementById('stage' + stage).style.display = 'none';
+        document.getElementById('stage' + (stage + 1)).style.display = 'block';
+        currentStage = stage + 1;
+      }, 1500);
+    } else {
+      setTimeout(function() {
+        timerRunning = false;
+        document.getElementById('message').innerText = 'Congratulations! You escaped the room in time!';
+        document.getElementById('message').style.color = '#ffd700';
+        document.getElementById('stages').style.display = 'none';
+      }, 1500);
+    }
+  } else {
+    feedback.innerText = 'Not quite right. Try again!';
+    feedback.style.color = '#ff4444';
+  }
+}
+
+updateTimer();
+</script>
 </body>
 </html>`;
 
-    setOutput(html);
-  };
+  setOutput(html);
+};
 
   const saveToDatabase = async () => {
     if (!output) {
