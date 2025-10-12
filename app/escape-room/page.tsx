@@ -129,6 +129,8 @@ export default function EscapeRoomPage() {
   const [configName, setConfigName] = useState('My Escape Room');
   const [saving, setSaving] = useState(false);
   const [saveMessage, setSaveMessage] = useState('');
+  const [attemptCount, setAttemptCount] = useState(0);
+  const [showSolution, setShowSolution] = useState(false);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -182,6 +184,8 @@ export default function EscapeRoomPage() {
     setFeedback('');
     setCompleted(false);
     setOutput('');
+    setAttemptCount(0);
+    setShowSolution(false);
     setMode('game');
   };
 
@@ -190,6 +194,8 @@ export default function EscapeRoomPage() {
     setIsRunning(false);
     setCompleted(false);
     setFeedback('');
+    setAttemptCount(0);
+    setShowSolution(false);
   };
 
   const checkAnswer = () => {
@@ -199,6 +205,8 @@ export default function EscapeRoomPage() {
 
     if (userTrimmed === solutionTrimmed || userCode.includes(challenge.solution || '')) {
       setFeedback('Correct! Moving to next stage...');
+      setAttemptCount(0);
+      setShowSolution(false);
       setTimeout(() => {
         if (currentStage < challenges.length - 1) {
           setCurrentStage(currentStage + 1);
@@ -211,7 +219,12 @@ export default function EscapeRoomPage() {
         }
       }, 1500);
     } else {
-      setFeedback('Not quite right. Try again!');
+      setAttemptCount(prev => prev + 1);
+      setFeedback(`Not quite right. Try again! (Attempt ${attemptCount + 1}/3)`);
+      
+      if (attemptCount >= 2) {
+        setShowSolution(true);
+      }
     }
   };
 
@@ -828,6 +841,61 @@ updateTimer();
                     textShadow: `0 0 10px ${feedback.includes('Correct') ? 'rgba(0,255,0,0.5)' : 'rgba(255,68,68,0.5)'}`
                   }}>
                     {feedback}
+                  </p>
+                </div>
+              )}
+
+              {showSolution && (
+                <div style={{
+                  padding: '1rem',
+                  background: 'rgba(255,215,0,0.1)',
+                  border: '2px solid #ffd700',
+                  borderRadius: 8
+                }}>
+                  <div style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginBottom: '0.5rem'
+                  }}>
+                    <p style={{
+                      margin: 0,
+                      color: '#ffd700',
+                      fontWeight: 'bold',
+                      fontSize: '1.1rem'
+                    }}>
+                      Need help? 💡
+                    </p>
+                    <button
+                      onClick={() => {
+                        setUserCode(challenges[currentStage].solution || '');
+                        setShowSolution(false);
+                        setAttemptCount(0);
+                      }}
+                      style={{
+                        padding: '8px 16px',
+                        background: 'linear-gradient(135deg, #ffd700 0%, #ffed4e 100%)',
+                        color: '#1a1a2e',
+                        border: 'none',
+                        borderRadius: 6,
+                        cursor: 'pointer',
+                        fontSize: '0.9rem',
+                        fontWeight: 'bold',
+                        transition: 'transform 0.2s'
+                      }}
+                      onMouseEnter={(e) => e.currentTarget.style.transform = 'scale(1.05)'}
+                      onMouseLeave={(e) => e.currentTarget.style.transform = 'scale(1)'}
+                    >
+                      Show Solution
+                    </button>
+                  </div>
+                  <p style={{
+                    margin: 0,
+                    color: 'white',
+                    fontSize: '0.9rem',
+                    opacity: 0.9
+                  }}>
+                    Click to see the correct answer and move forward
                   </p>
                 </div>
               )}
