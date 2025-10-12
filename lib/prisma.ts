@@ -1,7 +1,6 @@
 import { PrismaClient } from '@prisma/client';
 
-// PrismaClient is attached to the `global` object in development to prevent
-// exhausting database connections due to hot reloading in Next.js
+
 const globalForPrisma = global as unknown as { prisma: PrismaClient };
 
 export const prisma =
