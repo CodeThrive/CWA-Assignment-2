@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-// GET - Retrieve a single escape room by ID
+
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
@@ -29,7 +29,7 @@ export async function GET(
   }
 }
 
-// PUT - Update an escape room
+
 export async function PUT(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }

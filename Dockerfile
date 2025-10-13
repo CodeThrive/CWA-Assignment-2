@@ -1,47 +1,45 @@
-# Use official Node.js 22 image
 FROM node:22-alpine AS base
 
-# Install dependencies only when needed
 FROM base AS deps
 RUN apk add --no-cache libc6-compat
 WORKDIR /app
 
-# Copy package files
+
 COPY package.json package-lock.json* ./
 RUN npm ci
 
-# Rebuild the source code only when needed
+
 FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Generate Prisma Client BEFORE building
+
 RUN npx prisma generate
 
-# Disable telemetry during build
+
 ENV NEXT_TELEMETRY_DISABLED 1
 
-# Build the Next.js app
+
 RUN npm run build
 
-# Production image, copy all files and run next
+
 FROM base AS runner
 WORKDIR /app
 
 ENV NODE_ENV production
 ENV NEXT_TELEMETRY_DISABLED 1
 
-# Create non-root user
+
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
-# Copy built application
+
 COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Copy prisma folder and generated client
+
 COPY --from=builder --chown=nextjs:nodejs /app/node_modules/.prisma ./node_modules/.prisma
 COPY --from=builder --chown=nextjs:nodejs /app/node_modules/@prisma ./node_modules/@prisma
 COPY --from=builder --chown=nextjs:nodejs /app/prisma ./prisma
