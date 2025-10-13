@@ -59,7 +59,7 @@ export async function PUT(
   }
 }
 
-// DELETE - Delete an escape room
+
 export async function DELETE(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
