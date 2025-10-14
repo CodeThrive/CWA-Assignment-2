@@ -4,7 +4,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     
-    // Validate the data but DON'T save to database
+    
     if (!body.name || !body.timeLimit || !body.challenges || !body.htmlOutput) {
       return NextResponse.json(
         { error: 'Missing required fields' },
@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Return success without saving
+    
     return NextResponse.json(
       { 
         success: true,

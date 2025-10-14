@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-// GET - Retrieve all escape rooms
 export async function GET() {
   try {
     const escapeRooms = await prisma.escapeRoom.findMany({
@@ -20,13 +19,11 @@ export async function GET() {
   }
 }
 
-// POST - Create a new escape room
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { name, timeLimit, challenges, htmlOutput } = body;
 
-    // Validation
     if (!name || !timeLimit || !challenges || !htmlOutput) {
       return NextResponse.json(
         { error: 'Missing required fields' },
