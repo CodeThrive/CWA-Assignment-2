@@ -648,17 +648,45 @@ updateTimer();
     );
   }
 
+  // GAME MODE WITH BACKGROUND IMAGE
   return (
-    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', gap: '1.5rem' }}>
+    <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', height: '100%', gap: '1.5rem' }}>
+      {/* Background Image Layer */}
       <div style={{
-        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        backgroundImage: 'url("/images/Best-Escape-Room-San-Jose-Beat-The-Lock-Escape.webp")',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed',
+        zIndex: -1
+      }} />
+
+      {/* Dark overlay for readability */}
+      <div style={{
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        background: 'linear-gradient(135deg, rgba(18, 18, 26, 0.92) 0%, rgba(31, 38, 62, 0.90) 100%)',
+        zIndex: -1
+      }} />
+
+      {/* All content */}
+      <div style={{
+        background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.95) 0%, rgba(118, 75, 162, 0.95) 100%)',
         padding: '1.5rem',
         borderRadius: 12,
-        boxShadow: '0 8px 32px rgba(102, 126, 234, 0.3)',
+        boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
         border: '2px solid rgba(255,255,255,0.1)',
         display: 'flex',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
+        backdropFilter: 'blur(10px)'
       }}>
         <div>
           <h2 style={{ margin: 0, color: 'white', fontSize: '2rem', textShadow: '0 2px 10px rgba(0,0,0,0.3)' }}>
@@ -679,7 +707,8 @@ updateTimer();
             cursor: 'pointer',
             fontWeight: 'bold',
             fontSize: '1rem',
-            transition: 'all 0.2s'
+            transition: 'all 0.2s',
+            backdropFilter: 'blur(5px)'
           }}
           onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.3)'}
           onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.2)'}
@@ -699,18 +728,20 @@ updateTimer();
           border: '2px solid rgba(102, 126, 234, 0.3)',
           borderRadius: 12,
           padding: '1.5rem',
-          background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%)',
+          background: 'rgba(26, 26, 46, 0.92)',
           display: 'flex',
           flexDirection: 'column',
           gap: '1.5rem',
-          boxShadow: '0 8px 32px rgba(0,0,0,0.1)'
+          boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+          backdropFilter: 'blur(10px)'
         }}>
           <div style={{
-            background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)',
+            background: 'linear-gradient(135deg, rgba(30, 60, 114, 0.95) 0%, rgba(42, 82, 152, 0.95) 100%)',
             padding: '1.5rem',
             borderRadius: 12,
             border: '2px solid #ffd700',
-            boxShadow: '0 4px 20px rgba(255, 215, 0, 0.2)'
+            boxShadow: '0 4px 20px rgba(255, 215, 0, 0.2)',
+            backdropFilter: 'blur(5px)'
           }}>
             <div style={{
               display: 'flex',
@@ -733,14 +764,15 @@ updateTimer();
 
           {isRunning && (
             <div style={{
-              background: 'rgba(0,0,0,0.2)',
+              background: 'rgba(0,0,0,0.4)',
               borderRadius: 10,
               padding: '1rem',
-              border: '1px solid rgba(255,255,255,0.1)'
+              border: '1px solid rgba(255,255,255,0.1)',
+              backdropFilter: 'blur(5px)'
             }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                <span style={{ fontWeight: 'bold', color: 'var(--fg)' }}>Progress</span>
-                <span style={{ fontWeight: 'bold', color: '#667eea' }}>
+                <span style={{ fontWeight: 'bold', color: 'white' }}>Progress</span>
+                <span style={{ fontWeight: 'bold', color: '#ffd700' }}>
                   Stage {currentStage + 1} of {challenges.length}
                 </span>
               </div>
@@ -755,9 +787,9 @@ updateTimer();
                 <div style={{
                   width: `${progress}%`,
                   height: '100%',
-                  background: 'linear-gradient(90deg, #667eea 0%, #764ba2 100%)',
+                  background: 'linear-gradient(90deg, #ffd700 0%, #ffed4e 100%)',
                   transition: 'width 0.3s ease',
-                  boxShadow: '0 0 10px rgba(102, 126, 234, 0.5)'
+                  boxShadow: '0 0 10px rgba(255, 215, 0, 0.5)'
                 }} />
               </div>
             </div>
@@ -765,7 +797,7 @@ updateTimer();
 
           {isRunning && !completed && (
             <div style={{
-              background: 'linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)',
+              background: 'linear-gradient(135deg, rgba(30, 60, 114, 0.95) 0%, rgba(42, 82, 152, 0.95) 100%)',
               padding: '2rem',
               borderRadius: 12,
               border: '3px solid #ffd700',
@@ -773,7 +805,8 @@ updateTimer();
               display: 'flex',
               flexDirection: 'column',
               gap: '1rem',
-              boxShadow: '0 8px 32px rgba(255, 215, 0, 0.2)'
+              boxShadow: '0 8px 32px rgba(255, 215, 0, 0.2)',
+              backdropFilter: 'blur(10px)'
             }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                 <div style={{ color: '#ffd700' }}>
@@ -828,10 +861,11 @@ updateTimer();
               {feedback && (
                 <div style={{
                   padding: '1rem',
-                  background: feedback.includes('Correct') ? 'rgba(0,255,0,0.1)' : 'rgba(255,68,68,0.1)',
+                  background: feedback.includes('Correct') ? 'rgba(0,255,0,0.2)' : 'rgba(255,68,68,0.2)',
                   border: `2px solid ${feedback.includes('Correct') ? '#00ff00' : '#ff4444'}`,
                   borderRadius: 8,
-                  textAlign: 'center'
+                  textAlign: 'center',
+                  backdropFilter: 'blur(5px)'
                 }}>
                   <p style={{
                     margin: 0,
@@ -848,9 +882,10 @@ updateTimer();
               {showSolution && (
                 <div style={{
                   padding: '1rem',
-                  background: 'rgba(255,215,0,0.1)',
+                  background: 'rgba(255,215,0,0.2)',
                   border: '2px solid #ffd700',
-                  borderRadius: 8
+                  borderRadius: 8,
+                  backdropFilter: 'blur(5px)'
                 }}>
                   <div style={{
                     display: 'flex',
@@ -904,13 +939,14 @@ updateTimer();
 
           {completed && (
             <div style={{
-              background: 'linear-gradient(135deg, #00c853 0%, #00e676 100%)',
+              background: 'linear-gradient(135deg, rgba(0, 200, 83, 0.95) 0%, rgba(0, 230, 118, 0.95) 100%)',
               color: 'white',
               padding: '3rem',
               borderRadius: 12,
               textAlign: 'center',
               border: '3px solid #ffd700',
-              boxShadow: '0 8px 32px rgba(0,200,83,0.4)'
+              boxShadow: '0 8px 32px rgba(0,200,83,0.4)',
+              backdropFilter: 'blur(10px)'
             }}>
               <div style={{ fontSize: '4rem', marginBottom: '1rem' }}>🎉</div>
               <div style={{ fontSize: '2rem', fontWeight: 'bold', marginBottom: '0.5rem', textShadow: '0 2px 10px rgba(0,0,0,0.3)' }}>
@@ -931,12 +967,13 @@ updateTimer();
             display: 'flex',
             flexDirection: 'column',
             gap: '1rem',
-            background: 'linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%)',
-            boxShadow: '0 8px 32px rgba(0,0,0,0.1)'
+            background: 'rgba(26, 26, 46, 0.92)',
+            boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+            backdropFilter: 'blur(10px)'
           }}>
             <div>
-              <h3 style={{ margin: 0, fontSize: '1.5rem', color: 'var(--fg)' }}>HTML Output</h3>
-              <p style={{ fontSize: '0.95rem', margin: '0.5rem 0 0 0', opacity: 0.8 }}>
+              <h3 style={{ margin: 0, fontSize: '1.5rem', color: 'white' }}>HTML Output</h3>
+              <p style={{ fontSize: '0.95rem', margin: '0.5rem 0 0 0', color: 'rgba(255,255,255,0.8)' }}>
                 Generate standalone HTML file with your custom configuration
               </p>
             </div>
@@ -969,15 +1006,15 @@ updateTimer();
                 fontFamily: '"Courier New", monospace',
                 fontSize: '0.75rem',
                 padding: '12px',
-                background: 'var(--bg)',
-                color: 'var(--fg)',
+                background: '#1a1a2e',
+                color: '#00ff00',
                 border: '2px solid rgba(102, 126, 234, 0.3)',
                 borderRadius: 8,
                 resize: 'none',
                 whiteSpace: 'pre',
                 overflowWrap: 'normal',
                 overflow: 'auto',
-                boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.1)'
+                boxShadow: 'inset 0 2px 8px rgba(0,0,0,0.3)'
               }}
               placeholder="Click 'Generate Code' to create HTML output..."
             />
@@ -1031,13 +1068,14 @@ updateTimer();
                 {saveMessage && (
                   <div style={{
                     padding: '10px',
-                    background: saveMessage.includes('successfully') ? 'rgba(0,200,83,0.1)' : 'rgba(255,68,68,0.1)',
+                    background: saveMessage.includes('successfully') ? 'rgba(0,200,83,0.2)' : 'rgba(255,68,68,0.2)',
                     border: `2px solid ${saveMessage.includes('successfully') ? '#00c853' : '#ff4444'}`,
                     borderRadius: 8,
-                    color: saveMessage.includes('successfully') ? '#00c853' : '#ff4444',
+                    color: saveMessage.includes('successfully') ? '#00ff00' : '#ff4444',
                     fontWeight: 'bold',
                     textAlign: 'center',
-                    fontSize: '0.9rem'
+                    fontSize: '0.9rem',
+                    backdropFilter: 'blur(5px)'
                   }}>
                     {saveMessage}
                   </div>
